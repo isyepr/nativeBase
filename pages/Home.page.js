@@ -10,7 +10,9 @@ class Home extends Component {
     expenses: [],
     nominal: 0,
     deskripsi: '',
-    userId: '0'
+    userId: '0',
+    expense_id: '0'
+
   }
 
   componentDidMount = () => {
@@ -52,7 +54,9 @@ class Home extends Component {
         this.setState({ expenses: response.data.data[0].expenses })
         this.setState({ total_expense: response.data.data[0].total_expense })
         this.setState({ userId: response.data.data[0]._id })
-        console.log('user info ', this.state);
+        this.setState({ expense_id: response.data.data[0].expenses[0]._id })
+
+        console.log('user info ', this.state.expense_id);
       }, (error) => {
         console.log('user info error ', error);
       });
@@ -84,6 +88,24 @@ class Home extends Component {
     this.setState({ deskripsi: text })
   }
 
+  deleteExpense = (id, value) => {
+    axios.delete('http://10.0.2.2:3000/api/expense/delete/' + id, {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+        "token": this.props.token,
+      }
+    })
+      .then((response) => {
+        console.log('delte expnse', response);
+        this.updateTotalExpense(Number(this.state.total_expense) - Number(value))
+        this.getUserInfo()
+      }, (error) => {
+        console.log('delete expense error', error);
+      });
+  }
+
+
   render() {
     return (
       <Container>
@@ -101,13 +123,13 @@ class Home extends Component {
                   <Label>Deskripsi</Label>
                   <Input onChangeText={this.handleDeskripsiInput} />
                 </Item>
-                <Button full style={{ marginTop: 16 }}
+                <Button full style={{ backgroundColor: "#fdb827", alignSelf: 'center', borderRadius: 5, marginTop: 16 }}
                   onPress={
                     () => this.simpan()
                   }>
                   <Text>Simpan</Text>
                 </Button>
-                <Button full style={{ marginTop: 16 }}
+                <Button full style={{ backgroundColor: "#fdb827", alignSelf: 'center', borderRadius: 5, marginTop: 16 }}
                   onPress={
                     () => this.getUserInfo()
                   }>
@@ -129,7 +151,12 @@ class Home extends Component {
                             <Text note>{item.description}</Text>
                           </Body>
                           <Right>
-                            <Text note>3:43 pm</Text>
+                            <Button style={{ backgroundColor: "red", alignSelf: 'center', borderRadius: 5, marginTop: 16 }}
+                              onPress={
+                                () => this.deleteExpense( item._id, item.amount )
+                              }>
+                              <Text>X</Text>
+                            </Button>
                           </Right>
                         </ListItem>
                       ))
