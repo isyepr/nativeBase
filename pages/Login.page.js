@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'react-native-axios';
-import { Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Card} from 'native-base';
 import { connect } from 'react-redux'
 import { addToken } from '../redux/Action'
 
@@ -45,26 +45,30 @@ class Login extends Component {
     render() {
         return (
             <Container>
-                <Header />
-                <Content>
-                    <Form>
-                        <Item floatingLabel>
-                            <Label>Email</Label>
-                            <Input onChangeText={this.handleEmailInput} />
-                        </Item>
-                        <Item floatingLabel>
-                            <Label>Password</Label>
-                            <Input onChangeText={this.handlePasswordInput} />
-                        </Item>
-                    </Form>
-
-                </Content>
-                <Button full
+                
+                <Content  style={{ marginTop: 150, marginLeft: 30, marginRight: 30 }}>
+                <Text style={{ textAlign: 'center', fontFamily: 'EvilIcons', marginBottom: 15}}>
+                    Selamat Datang
+                </Text>
+                    <Card  style={{ paddingBottom: 40, paddingLeft: 30, paddingRight:50, borderRadius: 10, backgroundColor: "#f1f1f1" }}>
+                        <Form>
+                            <Item floatingLabel>
+                                <Label>Email</Label>
+                                <Input onChangeText={this.handleEmailInput} />
+                            </Item>
+                            <Item floatingLabel>
+                                <Label>Password</Label>
+                                <Input onChangeText={this.handlePasswordInput} />
+                            </Item>
+                        </Form>
+                    </Card>
+                <Button style={{backgroundColor: "#fdb827", alignSelf:'center', borderRadius: 5, marginTop: 10}}
                     onPress={
                         () => this.login()
                     }>
                     <Text>Login</Text>
                 </Button>
+                </Content>
             </Container>
         );
     }
